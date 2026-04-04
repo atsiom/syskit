@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── DARK THEME (default) ── */
+:root {
+  /* surfaces */
+  --bg:          #0b0f1a;
+  --surface:     #111827;
+  --surface-2:   #182030;
+  --surface-3:   #1e2d42;
+  --surface-4:   #243350;
+
+  /* borders */
+  --border:      #1e2d47;
+  --border-2:    #2d4366;
+
+  /* text */
+  --text:        #e8edf5;
+  --text-muted:  #8fa3bf;
+  --text-faint:  #4d6680;
+
+  /* accent — green */
+  --green:       #2ecc71;
+  --green-dim:   #1a7a44;
+  --green-bg:    #081a10;
+
+  /* accent — amber */
+  --amber:       #f5a623;
+  --amber-dim:   #7a4f0a;
+  --amber-bg:    #1a1005;
+
+  /* accent — blue */
+  --blue:        #4da6ff;
+  --blue-dim:    #1a4a7a;
+  --blue-bg:     #051020;
+
+  /* accent — red */
+  --red:         #ff5f5f;
+  --red-dim:     #7a1a1a;
+  --red-bg:      #1a0505;
+
+  /* accent — purple */
+  --purple:      #b78fff;
+  --purple-dim:  #4a2a7a;
+  --purple-bg:   #100a1f;
+
+  /* accent — teal */
+  --teal:        #2dd4bf;
+  --teal-dim:    #0d6b60;
+  --teal-bg:     #041512;
+
+  /* typography */
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* layout */
+  --sidebar-w:   220px;
+  --header-h:    54px;
+
+  /* type scale */
+  --xs:   0.75rem;
+  --sm:   0.875rem;
+  --base: 1rem;
+  --md:   1.0625rem;
+  --lg:   1.1875rem;
+  --xl:   1.375rem;
+  --2xl:  1.75rem;
+  --3xl:  2.25rem;
+}
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --bg:          #f0f4f8;
+  --surface:     #ffffff;
+  --surface-2:   #e8eef5;
+  --surface-3:   #d8e4f0;
+  --surface-4:   #c8d8e8;
+
+  --border:      #c8d8e8;
+  --border-2:    #a8bdd0;
+
+  --text:        #0d1b2a;
+  --text-muted:  #3d5a78;
+  --text-faint:  #7a9ab8;
+
+  --green:       #1a9e52;
+  --green-dim:   #a8dfc0;
+  --green-bg:    #e6f7ee;
+
+  --amber:       #b87010;
+  --amber-dim:   #f0d090;
+  --amber-bg:    #fef7e6;
+
+  --blue:        #1a6abf;
+  --blue-dim:    #90bce8;
+  --blue-bg:     #e6f0fb;
+
+  --red:         #c0392b;
+  --red-dim:     #f0a8a0;
+  --red-bg:      #fdecea;
+
+  --purple:      #6a3fbf;
+  --purple-dim:  #c0a0e8;
+  --purple-bg:   #f2edfc;
+
+  --teal:        #0d8a7a;
+  --teal-dim:    #90d8d0;
+  --teal-bg:     #e6f7f5;
+}
+
+html { font-size: 15px; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--base);
+  line-height: 1.65;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.018) 2px, rgba(0,0,0,0.018) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+[data-theme="light"] body::before {
+  background: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-sans);
+  font-size: var(--base);
+}
+
+button { cursor: pointer; font-family: var(--font-sans); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@keyframes ripple {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(4); opacity: 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-enter { animation: fadeUp 0.22s ease both; }
+
+.maplibregl-map { font-family: var(--font-sans); }
