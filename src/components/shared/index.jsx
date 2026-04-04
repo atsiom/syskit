@@ -190,11 +190,11 @@ export function DataTable({ rows, highlightKeys = [], warnKeys = [] }) {
   return (
     <table style={{ width: "100%", borderCollapse: "collapse" }}>
       <tbody>
-        {rows.map(([label, value]) => {
+        {rows.map(([label, value], i) => {
           const isHighlight = highlightKeys.includes(label);
           const isWarn = warnKeys.includes(label);
           return (
-            <tr key={label} style={{ borderBottom: "1px solid var(--border)" }}>
+            <tr key={label} style={{ borderBottom: i < rows.length - 1 ? "1px solid var(--border)" : "none" }}>
               <td style={{ padding: "9px 5px", fontSize: "var(--xs)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-faint)", width: "44%" }}>
                 {label}
               </td>
@@ -213,6 +213,7 @@ export function DataTable({ rows, highlightKeys = [], warnKeys = [] }) {
 // options: array of strings OR array of { label, value }
 export function CustomSelect({ options, value, onChange, color = "var(--purple)" }) {
   const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -258,13 +259,15 @@ export function CustomSelect({ options, value, onChange, color = "var(--purple)"
               <button
                 key={String(o.value)}
                 onClick={() => { onChange(o.value); setOpen(false); }}
+                onMouseEnter={() => setHovered(o.value)}
+                onMouseLeave={() => setHovered(null)}
                 style={{
                   width: "100%", padding: "9px 14px", border: "none",
                   borderBottom: "1px solid var(--border)",
-                  background: isActive ? "var(--green-bg)" : "transparent",
-                  color: isActive ? "var(--green)" : "var(--text-muted)",
+                  background: isActive ? "var(--green-bg)" : hovered === o.value ? "var(--surface-3)" : "transparent",
+                  color: isActive ? "var(--green)" : hovered === o.value ? "var(--text)" : "var(--text-muted)",
                   fontFamily: "var(--font-mono)", fontSize: "var(--sm)",
-                  textAlign: "left", cursor: "pointer", transition: "background 0.1s",
+                  textAlign: "left", cursor: "pointer", transition: "background 0.1s, color 0.1s",
                 }}
               >
                 {o.label}

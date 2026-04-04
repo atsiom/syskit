@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardLabel, PageHeader, PresetRow, s } from "./shared/index.jsx";
+import { Card, CardLabel, PageHeader, PresetRow, CopyButton, s } from "./shared/index.jsx";
 
 const CRON_PRESETS = [
   { label: "every minute",   value: "* * * * *" },
@@ -107,7 +107,10 @@ export default function CrontabCalculator() {
       </Card>
 
       <Card style={{ opacity: allValid ? 1 : 0.45 }} title="Result">
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xl)", fontWeight: 700, color: "var(--amber)", letterSpacing: "0.08em", marginBottom: 5 }}>{expression}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 5 }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xl)", fontWeight: 700, color: "var(--amber)", letterSpacing: "0.08em" }}>{expression}</span>
+          <CopyButton text={expression} />
+        </div>
         <div style={{ fontSize: "var(--md)", color: "var(--text-muted)", marginBottom: "1rem" }}>{allValid ? describe() : "—"}</div>
         <div style={{ height: 1, background: "var(--border)", marginBottom: "1rem" }} />
         <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 9 }}>Next 5 runs (local time)</div>

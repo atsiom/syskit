@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import atsiomLogo from "./assets/atsiom-logo.png";
 import ChmodCalculator from "./components/ChmodCalculator.jsx";
 import CrontabCalculator from "./components/CrontabCalculator.jsx";
 import CIDRCalculator from "./components/CIDRCalculator.jsx";
@@ -98,8 +99,6 @@ function ShareButton() {
 
 export default function App() {
   const [activeTool, setActiveTool] = useState(getToolFromPath);
-  const [localTime, setLocalTime] = useState(new Date().toLocaleTimeString());
-  const [localDate, setLocalDate] = useState(new Date().toLocaleDateString());
   const [theme, setTheme] = useState(() => localStorage.getItem("syskit-theme") || "dark");
 
   useEffect(() => {
@@ -120,16 +119,11 @@ export default function App() {
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      setLocalTime(now.toLocaleTimeString());
-      setLocalDate(now.toLocaleDateString());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
+  const scrollRef = useRef(null);
+  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [activeTool]);
 
   const activeMeta = TOOLS.find((t) => t.id === activeTool);
   const ActiveComponent = activeMeta?.Component || ChmodCalculator;
@@ -147,12 +141,12 @@ export default function App() {
 
         {/* Brand */}
         <div style={{ height: "var(--header-h)", display: "flex", alignItems: "center", padding: "0 1.25rem", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--lg)", fontWeight: 700, color: "var(--green)", letterSpacing: "0.04em" }}>syskit<span style={{ color: "var(--text-faint)" }}>:</span></span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--lg)", fontWeight: 400, color: "var(--green)", letterSpacing: "0.04em" }}>syskit<span style={{ color: "var(--text-faint)" }}>:</span></span>
         </div>
 
         {/* Nav items */}
         <div style={{ flex: 1, padding: "0.75rem 0.5rem", overflowY: "auto" }}>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-faint)", padding: "0.5rem 0.75rem 0.5rem", marginBottom: 4 }}>Tools</div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", fontWeight: 400, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-faint)", padding: "0.5rem 0.75rem 0.5rem", marginBottom: 4 }}>Tools</div>
           {TOOLS.map((tool) => {
             const isActive = activeTool === tool.id;
             return (
@@ -161,10 +155,10 @@ export default function App() {
                 onClick={() => setActiveTool(tool.id)}
                 style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", border: `1px solid ${isActive ? "var(--green-dim)" : "transparent"}`, background: isActive ? "var(--green-bg)" : "transparent", borderRadius: 10, cursor: "pointer", textAlign: "left", transition: "all 0.13s", marginBottom: 2 }}
               >
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", fontWeight: 700, color: isActive ? "var(--green)" : "var(--text-faint)", background: isActive ? "rgba(46,204,113,0.12)" : "var(--surface-2)", border: `1px solid ${isActive ? "var(--green-dim)" : "var(--border)"}`, borderRadius: 8, padding: "2px 6px", flexShrink: 0, minWidth: 40, textAlign: "center", transition: "all 0.13s" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", fontWeight: 400, color: isActive ? "var(--green)" : "var(--text-faint)", background: isActive ? "rgba(46,204,113,0.12)" : "var(--surface-2)", border: `1px solid ${isActive ? "var(--green-dim)" : "var(--border)"}`, borderRadius: 8, padding: "2px 6px", flexShrink: 0, minWidth: 40, textAlign: "center", transition: "all 0.13s" }}>
                   {tool.glyph}
                 </span>
-                <span style={{ fontSize: "var(--md)", fontWeight: 500, color: isActive ? "var(--green)" : "var(--text-muted)", transition: "color 0.13s" }}>
+                <span style={{ fontSize: "var(--md)", fontWeight: 400, color: isActive ? "var(--green)" : "var(--text-muted)", transition: "color 0.13s" }}>
                   {tool.label}
                 </span>
               </button>
@@ -172,13 +166,13 @@ export default function App() {
           })}
         </div>
 
-        {/* Clock footer */}
+        {/* Brand footer */}
         <div style={{ padding: "0.85rem 1.25rem", borderTop: "1px solid var(--border)", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--green)", animation: "pulse 2.5s ease-in-out infinite", flexShrink: 0, marginTop: 6 }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+            <img src={atsiomLogo} alt="Atsiom" style={{ width: 28, height: 28, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} />
             <div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--sm)", color: "var(--text-muted)", fontWeight: 500 }}>{localTime}</div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", color: "var(--text-faint)" }}>{localDate} local</div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", fontWeight: 500, color: "var(--text-muted)", letterSpacing: "0.06em" }}>ATSIOM LLC</div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)", letterSpacing: "0.04em" }}>syskit tools</div>
             </div>
           </div>
         </div>
@@ -200,7 +194,7 @@ export default function App() {
         </header>
 
         {/* Scrollable content */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem 0" }}>
+        <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: "2rem 2.5rem 0" }}>
           <div style={{ width: "100%", maxWidth: 960, margin: "0 auto", paddingBottom: "5rem" }}>
             <ActiveComponent key={activeTool} />
           </div>
