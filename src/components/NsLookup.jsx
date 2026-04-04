@@ -77,7 +77,7 @@ export default function NsLookup() {
             onChange={(e) => setDomain(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && lookup()}
             placeholder="Enter domain name…"
-            style={{ ...s.monoInput, color: "var(--blue)", fontSize: "var(--lg)" }}
+            style={{ ...s.monoInput, color: "var(--blue)", fontSize: "var(--lg)", textTransform: "uppercase" }}
           />
           <button
             onClick={lookup}

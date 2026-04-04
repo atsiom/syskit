@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, PageHeader, CopyButton, s } from "./shared/index.jsx";
+import { Card, PageHeader, CopyButton, CustomSelect, s } from "./shared/index.jsx";
 
 export default function AwkGenerator() {
   const [separator, setSeparator] = useState(",");
@@ -96,9 +96,7 @@ export default function AwkGenerator() {
             </div>
             <div>
               <label style={{ display: "block", fontSize: "var(--xs)", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-faint)", marginBottom: 5 }}>Operator</label>
-              <select value={filterOp} onChange={(e) => setFilterOp(e.target.value)} style={{ ...s.monoInput, color: "var(--purple)" }}>
-                {["==", "!=", "~", "!~", ">", "<", ">=", "<="].map((o) => <option key={o}>{o}</option>)}
-              </select>
+              <CustomSelect options={["==", "!=", "~", "!~", ">", "<", ">=", "<="]} value={filterOp} onChange={setFilterOp} color="var(--purple)" />
             </div>
             <div>
               <label style={{ display: "block", fontSize: "var(--xs)", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-faint)", marginBottom: 5 }}>Value</label>

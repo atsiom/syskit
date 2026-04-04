@@ -70,7 +70,7 @@ export default function ChmodCalculator() {
       <PageHeader title="chmod calculator" badge="permissions" description="Toggle permission bits to compute the octal mode and symbolic notation." />
 
       <Card title="Permission bits">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: "1.2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
           <PermGroup heading="Owner (u)" keys={[{ key: "ur", label: "r — read" }, { key: "uw", label: "w — write" }, { key: "ux", label: "x — execute" }]} />
           <PermGroup heading="Group (g)"  keys={[{ key: "gr", label: "r — read" }, { key: "gw", label: "w — write" }, { key: "gx", label: "x — execute" }]} />
           <PermGroup heading="Others (o)" keys={[{ key: "or", label: "r — read" }, { key: "ow", label: "w — write" }, { key: "ox", label: "x — execute" }]} />

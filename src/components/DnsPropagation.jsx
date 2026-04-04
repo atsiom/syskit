@@ -2,18 +2,18 @@ import { useState } from "react";
 import { Card, PageHeader, Spinner, s } from "./shared/index.jsx";
 
 const DNS_SERVERS = [
-  { name: "Google",          location: "US / Global",   doh: "https://dns.google/resolve" },
-  { name: "Cloudflare",      location: "Global",        doh: "https://cloudflare-dns.com/dns-query" },
-  { name: "Quad9",           location: "Global",        doh: "https://dns.quad9.net/dns-query" },
-  { name: "OpenDNS",         location: "US",            doh: "https://doh.opendns.com/dns-query" },
-  { name: "AdGuard",         location: "Global",        doh: "https://dns.adguard-dns.com/dns-query" },
-  { name: "NextDNS",         location: "Global",        doh: "https://dns.nextdns.io/dns-query" },
-  { name: "Control D",       location: "Global",        doh: "https://freedns.controld.com/p0" },
-  { name: "Mullvad",         location: "Sweden",        doh: "https://doh.mullvad.net/dns-query" },
-  { name: "Yandex",          location: "Russia",        doh: "https://common.dot.dns.yandex.net/dns-query" },
-  { name: "CleanBrowsing",   location: "Global",        doh: "https://doh.cleanbrowsing.org/doh/family-filter/" },
-  { name: "dns0.eu",         location: "Europe",        doh: "https://dns0.eu/dns-query" },
-  { name: "Comodo",          location: "US",            doh: "https://doh.comodo.com/dns-query" },
+  { name: "Google",            location: "US / Global",    doh: "https://dns.google/resolve" },
+  { name: "Cloudflare",        location: "Global",         doh: "https://cloudflare-dns.com/dns-query" },
+  { name: "Cloudflare Family", location: "Global",         doh: "https://family.cloudflare-dns.com/dns-query" },
+  { name: "AliDNS",            location: "China / Asia",   doh: "https://dns.alidns.com/resolve" },
+  { name: "DNSPod",            location: "China / Global", doh: "https://doh.pub/dns-query" },
+  { name: "RethinkDNS",        location: "Global",         doh: "https://basic.rethinkdns.com/dns-query" },
+  { name: "NextDNS",           location: "Global",         doh: "https://dns.nextdns.io/dns-query" },
+  { name: "AdGuard",           location: "Global",         doh: "https://dns.adguard-dns.com/dns-query" },
+  { name: "dns.sb",            location: "Global",         doh: "https://doh.dns.sb/dns-query" },
+  { name: "OpenDNS",           location: "US",             doh: "https://doh.opendns.com/dns-query" },
+  { name: "Quad9",             location: "Global",         doh: "https://dns.quad9.net/dns-query" },
+  { name: "Mullvad",           location: "Sweden",         doh: "https://doh.mullvad.net/dns-query" },
 ];
 
 const RECORD_TYPES = ["A", "AAAA", "MX", "NS", "TXT", "CNAME"];
@@ -83,7 +83,7 @@ export default function DnsPropagation() {
             onChange={(e) => setDomain(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && check()}
             placeholder="Enter domain name…"
-            style={{ ...s.monoInput, color: "var(--teal)", fontSize: "var(--lg)" }}
+            style={{ ...s.monoInput, color: "var(--teal)", fontSize: "var(--lg)", textTransform: "uppercase" }}
           />
           <button
             onClick={check}

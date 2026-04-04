@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Card, CardLabel, PageHeader, DataTable, Stepper, s } from "./shared/index.jsx";
+import { useState, useEffect } from "react";
+import { Card, CardLabel, PageHeader, DataTable, Stepper, CustomSelect, s } from "./shared/index.jsx";
 
 const RAID_SPECS = {
   0:  { name:"RAID 0",  min:2,  fault:0, read:"Excellent (n× speed)",       write:"Excellent (n× speed)",       rebuild:"None — zero redundancy" },
@@ -29,13 +29,32 @@ const FS_OVERHEAD_OPTIONS = [
   { label: "~15% (heavily used)",  value: 0.85 },
 ];
 
-// Stepper that cycles through a preset list
+// Stepper that cycles through a preset list, with editable center input
 function PresetStepper({ presets, value, onChange, color = "var(--purple)" }) {
-  const idx = presets.indexOf(value);
-  const dec = () => { if (idx > 0) onChange(presets[idx - 1]); };
-  const inc = () => { if (idx < presets.length - 1) onChange(presets[idx + 1]); };
+  const [draft, setDraft] = useState(String(value));
+  useEffect(() => { setDraft(String(value)); }, [value]);
+
+  // find next preset strictly above / below current value (or typed value)
+  const dec = () => {
+    const below = presets.filter((p) => p < value);
+    if (below.length) onChange(below[below.length - 1]);
+  };
+  const inc = () => {
+    const above = presets.filter((p) => p > value);
+    if (above.length) onChange(above[0]);
+  };
+
+  const commit = () => {
+    const n = parseFloat(draft);
+    if (!isNaN(n) && n > 0) onChange(n);
+    else setDraft(String(value));
+  };
+
+  const atMin = value <= presets[0];
+  const atMax = value >= presets[presets.length - 1];
+
   const btnStyle = {
-    width: 34, height: 38,
+    width: 34, height: 42,
     background: "var(--surface-3)",
     border: "none",
     color: "var(--text-muted)",
@@ -47,14 +66,22 @@ function PresetStepper({ presets, value, onChange, color = "var(--purple)" }) {
     userSelect: "none",
   };
   return (
-    <div style={{ display: "flex", alignItems: "stretch", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
-      <button onClick={dec} disabled={idx <= 0}
-        style={{ ...btnStyle, borderRight: "1px solid var(--border)", opacity: idx <= 0 ? 0.35 : 1 }}>−</button>
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--surface-2)", fontFamily: "var(--font-mono)", fontWeight: 600, fontSize: "var(--lg)", color, minWidth: 70 }}>
-        {value}
-      </div>
-      <button onClick={inc} disabled={idx >= presets.length - 1}
-        style={{ ...btnStyle, borderLeft: "1px solid var(--border)", opacity: idx >= presets.length - 1 ? 0.35 : 1 }}>+</button>
+    <div style={{ display: "flex", alignItems: "stretch", border: "2px solid var(--border-2)", borderRadius: 8, overflow: "hidden" }}>
+      <button onClick={dec} disabled={atMin}
+        style={{ ...btnStyle, borderRight: "1px solid var(--border)", opacity: atMin ? 0.35 : 1 }}>−</button>
+      <input
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => e.key === "Enter" && commit()}
+        style={{
+          flex: 1, minWidth: 70, border: "none", outline: "none",
+          background: "var(--surface-2)", fontFamily: "var(--font-mono)",
+          fontWeight: 600, fontSize: "var(--lg)", color, textAlign: "center",
+        }}
+      />
+      <button onClick={inc} disabled={atMax}
+        style={{ ...btnStyle, borderLeft: "1px solid var(--border)", opacity: atMax ? 0.35 : 1 }}>+</button>
     </div>
   );
 }
@@ -137,10 +164,7 @@ export default function RAIDCalculator() {
           {/* Capacity unit */}
           <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             <label style={labelStyle}>Capacity unit</label>
-            <select value={unit} onChange={(e) => handleUnitChange(e.target.value)}
-              style={{ ...s.monoInput, color: "var(--purple)", fontSize: "var(--md)", height: 38, padding: "0 14px" }}>
-              {["GB", "TB", "TiB", "GiB"].map((u) => <option key={u} value={u}>{u}</option>)}
-            </select>
+            <CustomSelect options={["GB", "TB", "TiB", "GiB"]} value={unit} onChange={handleUnitChange} />
           </div>
 
           {/* Drive capacity */}
@@ -152,12 +176,7 @@ export default function RAIDCalculator() {
           {/* FS overhead */}
           <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
             <label style={labelStyle}>FS overhead</label>
-            <select value={overhead} onChange={(e) => setOverhead(parseFloat(e.target.value))}
-              style={{ ...s.monoInput, color: "var(--purple)", fontSize: "var(--sm)", height: 38, padding: "0 14px" }}>
-              {FS_OVERHEAD_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
+            <CustomSelect options={FS_OVERHEAD_OPTIONS} value={overhead} onChange={(v) => setOverhead(parseFloat(v))} />
           </div>
         </div>
         {calcError && <div style={s.errBox}>{calcError}</div>}

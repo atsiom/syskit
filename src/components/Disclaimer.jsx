@@ -56,9 +56,11 @@ export default function Disclaimer() {
 
       <Card>
         <p style={{ fontSize: "var(--xs)", fontFamily: "var(--font-mono)", color: "var(--text-faint)", textAlign: "center", lineHeight: 1.8 }}>
-          By using SYSKIT you acknowledge that you have read and understood this disclaimer.
+          By using syskit: you acknowledge that you have read and understood this disclaimer.
           <br />
-          SYSKIT · built with React + Vite
+          syskit: · built with React + Vite
+          <br />
+          brought to you by <a href="https://www.atsiom.com">ATSIOM LLC</a>
         </p>
       </Card>
     </div>
