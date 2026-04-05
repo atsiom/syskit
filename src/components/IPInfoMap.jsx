@@ -135,12 +135,10 @@ export default function IPInfoMap() {
           {lat && lng && (
             <Card style={{ overflow: "hidden", position: "relative" }} bodyStyle={{ padding: 0 }}>
               <div ref={mapRef} style={{ width: "100%", height: 340 }} />
-              <div style={{ position: "absolute", top: 10, right: 10, display: "flex", flexDirection: "column", gap: 4, zIndex: 10 }}>
-                {[{ label: "+", fn: zoomIn }, { label: "−", fn: zoomOut }].map(({ label, fn }) => (
-                  <button key={label} onClick={fn} style={{ width: 30, height: 30, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontFamily: "var(--font-mono)", fontSize: "var(--md)", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
-                    {label}
-                  </button>
-                ))}
+              <div style={{ position: "absolute", top: 10, right: 10, zIndex: 10, display: "flex", flexDirection: "column", background: "var(--surface)", border: "1px solid var(--border-2)", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 8px rgba(0,0,0,0.35)" }}>
+                <button onClick={zoomIn}  style={{ width: 36, height: 36, background: "transparent", border: "none", color: "var(--text)", fontFamily: "var(--font-mono)", fontSize: "var(--lg)", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>+</button>
+                <div style={{ height: 1, background: "var(--border-2)", margin: "0 6px" }} />
+                <button onClick={zoomOut} style={{ width: 36, height: 36, background: "transparent", border: "none", color: "var(--text)", fontFamily: "var(--font-mono)", fontSize: "var(--lg)", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>−</button>
               </div>
             </Card>
           )}
