@@ -28,8 +28,10 @@ export default function DnsPropagation() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const isValidDomain = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/.test(domain.trim());
+
   const check = async () => {
-    if (!domain.trim()) return;
+    if (!isValidDomain) return;
     const d = domain.trim();
     setLoading(true);
     setResults(DNS_SERVERS.map((srv) => ({ ...srv, status: "checking", answers: [], dnsStatus: null, latency: null })));
@@ -87,8 +89,8 @@ export default function DnsPropagation() {
           />
           <button
             onClick={check}
-            disabled={loading}
-            style={{ padding: "10px 22px", background: "var(--green-bg)", border: "1px solid var(--green-dim)", borderRadius: 12, color: "var(--green)", fontFamily: "var(--font-mono)", fontSize: "var(--md)", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}
+            disabled={loading || !isValidDomain}
+            style={{ padding: "10px 22px", background: "var(--green-bg)", border: "1px solid var(--green-dim)", borderRadius: 12, color: "var(--green)", fontFamily: "var(--font-mono)", fontSize: "var(--md)", cursor: isValidDomain ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap", opacity: isValidDomain ? 1 : 0.4, transition: "opacity 0.15s" }}
           >
             {loading ? <Spinner /> : null} Check
           </button>

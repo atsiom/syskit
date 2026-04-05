@@ -40,62 +40,29 @@ function ThemeToggle({ theme, onToggle }) {
       style={{
         display: "flex", alignItems: "center", gap: 7,
         background: "none", border: "none", cursor: "pointer",
-        marginLeft: "auto", padding: "2px 0",
+        padding: "2px 0",
       }}
     >
-      <span style={{ fontSize: 13, lineHeight: 1, color: isDark ? "var(--text-faint)" : "var(--amber)", transition: "color 0.2s" }}>☀</span>
+      <span style={{ fontSize: 16, lineHeight: 1, color: isDark ? "var(--text-faint)" : "var(--amber)", transition: "color 0.2s" }}>☀</span>
       <span style={{
         display: "inline-flex", alignItems: "center",
-        width: 36, height: 20, borderRadius: 10,
+        width: 40, height: 22, borderRadius: 11,
         background: isDark ? "var(--green-dim)" : "var(--surface-3)",
         border: "1px solid var(--border-2)",
         position: "relative", transition: "background 0.2s", flexShrink: 0,
       }}>
         <span style={{
-          position: "absolute", left: isDark ? 18 : 2,
-          width: 14, height: 14, borderRadius: "50%",
+          position: "absolute", left: isDark ? 20 : 2,
+          width: 16, height: 16, borderRadius: "50%",
           background: isDark ? "var(--green)" : "var(--text-muted)",
           transition: "left 0.2s, background 0.2s", flexShrink: 0,
         }} />
       </span>
-      <span style={{ fontSize: 12, lineHeight: 1, color: isDark ? "var(--blue)" : "var(--text-faint)", transition: "color 0.2s" }}>☾</span>
+      <span style={{ fontSize: 16, lineHeight: 1, color: isDark ? "var(--blue)" : "var(--text-faint)", transition: "color 0.2s" }}>☾</span>
     </button>
   );
 }
 
-function ShareButton() {
-  const [copied, setCopied] = useState(false);
-  const copy = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
-  };
-  return (
-    <button
-      onClick={copy}
-      title="Copy link to this tool"
-      style={{
-        display: "flex", alignItems: "center", justifyContent: "center",
-        width: 30, height: 30,
-        background: copied ? "var(--green-bg)" : "var(--surface-2)",
-        border: `1px solid ${copied ? "var(--green-dim)" : "var(--border)"}`,
-        color: copied ? "var(--green)" : "var(--text-muted)",
-        borderRadius: 8, cursor: "pointer", transition: "all 0.15s", flexShrink: 0,
-      }}
-    >
-      {copied ? (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ) : (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-        </svg>
-      )}
-    </button>
-  );
-}
 
 export default function App() {
   const [activeTool, setActiveTool] = useState(getToolFromPath);
@@ -189,7 +156,7 @@ export default function App() {
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", color: "var(--text-faint)", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: "2px 9px" }}>
             {activeMeta?.badge}
           </span>
-          <ShareButton />
+          <div style={{ flex: 1 }} />
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </header>
 

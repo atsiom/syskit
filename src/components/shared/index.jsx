@@ -116,18 +116,111 @@ export function CardLabel({ children }) {
   );
 }
 
+function ShareButton() {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setOpen(false);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
+  const items = [
+    {
+      id: "copy", label: "Copy link", action: copyLink,
+      icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
+    },
+    {
+      id: "x", label: "Share on X",
+      action: () => { window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`, "_blank"); setOpen(false); },
+      icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>,
+    },
+    {
+      id: "linkedin", label: "Share on LinkedIn",
+      action: () => { window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`, "_blank"); setOpen(false); },
+      icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>,
+    },
+  ];
+
+  return (
+    <div ref={ref} style={{ position: "relative", flexShrink: 0 }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        title="Share"
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          width: 28, height: 28,
+          background: open || copied ? "var(--green-bg)" : "var(--surface-2)",
+          border: `1px solid ${open || copied ? "var(--green-dim)" : "var(--border)"}`,
+          color: open || copied ? "var(--green)" : "var(--text-muted)",
+          borderRadius: 8, cursor: "pointer", transition: "all 0.15s",
+        }}
+      >
+        {copied
+          ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        }
+      </button>
+
+      {open && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 300,
+          background: "var(--surface)", border: "1px solid var(--border-2)",
+          borderRadius: 10, overflow: "hidden", minWidth: 185,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
+        }}>
+          {items.map((item, i) => (
+            <button
+              key={item.id}
+              onMouseDown={item.action}
+              onMouseEnter={() => setHoveredItem(item.id)}
+              onMouseLeave={() => setHoveredItem(null)}
+              style={{
+                width: "100%", padding: "9px 14px", border: "none",
+                borderBottom: i < items.length - 1 ? "1px solid var(--border)" : "none",
+                background: hoveredItem === item.id ? "var(--surface-3)" : "transparent",
+                color: hoveredItem === item.id ? "var(--text)" : "var(--text-muted)",
+                fontFamily: "var(--font-sans)", fontSize: "var(--sm)",
+                display: "flex", alignItems: "center", gap: 9,
+                textAlign: "left", cursor: "pointer", transition: "background 0.1s, color 0.1s",
+              }}
+            >
+              {item.icon}
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function PageHeader({ title, badge, description }) {
   const capitalize = (str) => str.replace(/\b\w/g, (c) => c.toUpperCase());
   return (
     <div style={{ marginBottom: "1.6rem" }}>
-      <h1 style={{ fontSize: "var(--xl)", fontWeight: 600, letterSpacing: "-0.02em", marginBottom: 5, display: "flex", alignItems: "center", gap: 10 }}>
-        {capitalize(title)}
-        {badge && (
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", color: "var(--text-faint)", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: "2px 9px" }}>
-            {badge}
-          </span>
-        )}
-      </h1>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: 5 }}>
+        <h1 style={{ fontSize: "var(--xl)", fontWeight: 600, letterSpacing: "-0.02em", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+          {capitalize(title)}
+          {badge && (
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)", color: "var(--text-faint)", background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: "2px 9px" }}>
+              {badge}
+            </span>
+          )}
+        </h1>
+        <div style={{ flex: 1 }} />
+        <ShareButton />
+      </div>
       {description && <p style={{ fontSize: "var(--sm)", color: "var(--text-muted)" }}>{description}</p>}
     </div>
   );
