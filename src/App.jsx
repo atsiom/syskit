@@ -10,6 +10,8 @@ import IPInfoMap from "./components/IPInfoMap.jsx";
 import NsLookup from "./components/NsLookup.jsx";
 import EpochConverter from "./components/EpochConverter.jsx";
 import DnsPropagation from "./components/DnsPropagation.jsx";
+import UrlEncoder from "./components/UrlEncoder.jsx";
+import RegexTester from "./components/RegexTester.jsx";
 import Disclaimer from "./components/Disclaimer.jsx";
 
 const TOOLS = [
@@ -23,66 +25,131 @@ const TOOLS = [
   { id: "nslookup",   label: "nslookup",   glyph: "DNS",   Component: NsLookup,          badge: "DNS" },
   { id: "epoch",      label: "epoch",      glyph: "ts",    Component: EpochConverter,    badge: "time" },
   { id: "dnsprop",    label: "DNS prop",   glyph: "⇢",     Component: DnsPropagation,    badge: "checker" },
+  { id: "urlencode",  label: "URL encode", glyph: "%20",   Component: UrlEncoder,        badge: "encoding" },
+  { id: "regex",      label: "regex",      glyph: ".*",    Component: RegexTester,       badge: "pattern" },
   { id: "disclaimer", label: "Disclaimer", glyph: "§",     Component: Disclaimer,        badge: "legal" },
 ];
 
-const BASE = import.meta.env.BASE_URL; // "/syskit/" in prod, "/" in dev
-
 function getToolFromPath() {
-  const path = window.location.pathname;
-  const relative = path.startsWith(BASE) ? path.slice(BASE.length) : path.replace(/^\//, "");
-  const id = relative.split("/")[0];
+  const segments = window.location.pathname.split("/").filter(Boolean);
+  const id = segments[segments.length - 1] ?? "";
   return TOOLS.find((t) => t.id === id)?.id ?? "chmod";
 }
 
-function ThemeToggle({ theme, onToggle }) {
-  const isDark = theme === "dark";
+const THEME_OPTIONS = [
+  {
+    value: "light", label: "Light",
+    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>,
+  },
+  {
+    value: "dark", label: "Dark",
+    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>,
+  },
+  {
+    value: "system", label: "System",
+    icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
+  },
+];
+
+function ThemeToggle({ theme, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const current = THEME_OPTIONS.find((o) => o.value === theme);
+
   return (
-    <button
-      onClick={onToggle}
-      title={`Switch to ${isDark ? "light" : "dark"} theme`}
-      style={{
-        display: "flex", alignItems: "center", gap: 7,
-        background: "none", border: "none", cursor: "pointer",
-        padding: "2px 0",
-      }}
-    >
-      <span style={{ fontSize: 16, lineHeight: 1, color: isDark ? "var(--text-faint)" : "var(--amber)", transition: "color 0.2s" }}>☀</span>
-      <span style={{
-        display: "inline-flex", alignItems: "center",
-        width: 40, height: 22, borderRadius: 11,
-        background: isDark ? "var(--green-dim)" : "var(--surface-3)",
-        border: "1px solid var(--border-2)",
-        position: "relative", transition: "background 0.2s", flexShrink: 0,
-      }}>
-        <span style={{
-          position: "absolute", left: isDark ? 20 : 2,
-          width: 16, height: 16, borderRadius: "50%",
-          background: isDark ? "var(--green)" : "var(--text-muted)",
-          transition: "left 0.2s, background 0.2s", flexShrink: 0,
-        }} />
-      </span>
-      <span style={{ fontSize: 16, lineHeight: 1, color: isDark ? "var(--blue)" : "var(--text-faint)", transition: "color 0.2s" }}>☾</span>
-    </button>
+    <div ref={ref} style={{ position: "relative" }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          padding: "5px 10px", height: 30,
+          background: open ? "var(--surface-3)" : "var(--surface-2)",
+          border: "1px solid var(--border)", borderRadius: 8,
+          color: "var(--text-muted)", cursor: "pointer", transition: "all 0.15s",
+        }}
+      >
+        {current?.icon}
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--xs)" }}>{current?.label}</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          style={{ opacity: 0.5, transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      {open && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 300,
+          background: "var(--surface)", border: "1px solid var(--border-2)",
+          borderRadius: 10, overflow: "hidden", minWidth: 130,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
+        }}>
+          {THEME_OPTIONS.map((opt, i) => (
+            <button
+              key={opt.value}
+              onMouseDown={() => { onChange(opt.value); setOpen(false); }}
+              onMouseEnter={() => setHovered(opt.value)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                width: "100%", padding: "9px 14px", border: "none",
+                borderBottom: i < THEME_OPTIONS.length - 1 ? "1px solid var(--border)" : "none",
+                background: theme === opt.value ? "var(--green-bg)" : hovered === opt.value ? "var(--surface-3)" : "transparent",
+                color: theme === opt.value ? "var(--green)" : hovered === opt.value ? "var(--text)" : "var(--text-muted)",
+                fontFamily: "var(--font-mono)", fontSize: "var(--sm)",
+                display: "flex", alignItems: "center", gap: 9,
+                textAlign: "left", cursor: "pointer", transition: "background 0.1s, color 0.1s",
+              }}
+            >
+              {opt.icon}
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
 
 export default function App() {
   const [activeTool, setActiveTool] = useState(getToolFromPath);
-  const [theme, setTheme] = useState(() => localStorage.getItem("syskit-theme") || "dark");
+  const [theme, setTheme] = useState(() => localStorage.getItem("syskit-theme") || "system");
+
+  const resolveTheme = (t) =>
+    t === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : t;
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("syskit-theme", theme);
+    document.documentElement.setAttribute("data-theme", resolveTheme(theme));
+  }, [theme]);
+
+  // Re-apply when system preference changes (only relevant when theme === "system")
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = () => {
+      if (theme === "system") {
+        document.documentElement.setAttribute("data-theme", resolveTheme("system"));
+      }
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, [theme]);
 
   useEffect(() => {
-    const path = window.location.pathname;
-    const relative = path.startsWith(BASE) ? path.slice(BASE.length) : path.replace(/^\//, "");
-    const current = relative.split("/")[0];
+    const segments = window.location.pathname.split("/").filter(Boolean);
+    const current = segments[segments.length - 1] ?? "";
     if (current !== activeTool) {
-      history.pushState({}, "", BASE + activeTool);
+      const base = segments.slice(0, -1).join("/");
+      history.pushState({}, "", (base ? "/" + base : "") + "/" + activeTool);
     }
   }, [activeTool]);
 
@@ -93,7 +160,6 @@ export default function App() {
   }, []);
 
 
-  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const scrollRef = useRef(null);
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [activeTool]);
@@ -163,7 +229,7 @@ export default function App() {
             {activeMeta?.badge}
           </span>
           <div style={{ flex: 1 }} />
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
+          <ThemeToggle theme={theme} onChange={setTheme} />
         </header>
 
         {/* Scrollable content */}

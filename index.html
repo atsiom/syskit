@@ -6,7 +6,18 @@
     <title>syskit</title>
     <script>
       (function () {
-        var t = localStorage.getItem('syskit-theme') || 'dark';
+        // Restore path after GitHub Pages 404 redirect
+        var redirect = sessionStorage.getItem('syskit-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('syskit-redirect');
+          history.replaceState(null, null, redirect);
+        }
+
+        // Apply theme before paint to avoid flash
+        var saved = localStorage.getItem('syskit-theme') || 'system';
+        var t = saved === 'system'
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : saved;
         document.documentElement.setAttribute('data-theme', t);
       })();
     </script>

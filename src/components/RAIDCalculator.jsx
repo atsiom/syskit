@@ -91,7 +91,7 @@ export default function RAIDCalculator() {
   const [drives, setDrives] = useState(4);
   const [unit, setUnit] = useState("TB");
   const [driveSize, setDriveSize] = useState(4); // default 4 TB
-  const [overhead, setOverhead] = useState(0.93);
+  const [overhead, setOverhead] = useState(1);
 
   // When unit changes, snap to nearest preset in new unit
   const handleUnitChange = (newUnit) => {
