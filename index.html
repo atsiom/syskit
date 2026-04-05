@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>syskit</title>
+    <style>body { visibility: hidden; }</style>
     <script>
       (function () {
         // Restore path after GitHub Pages 404 redirect
@@ -19,6 +20,7 @@
           ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
           : saved;
         document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.setProperty('--visibility', 'visible');
       })();
     </script>
   </head>

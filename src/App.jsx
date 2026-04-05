@@ -13,6 +13,7 @@ import DnsPropagation from "./components/DnsPropagation.jsx";
 import UrlEncoder from "./components/UrlEncoder.jsx";
 import Base64Codec from "./components/Base64Codec.jsx";
 import RegexTester from "./components/RegexTester.jsx";
+import JwtDecoder from "./components/JwtDecoder.jsx";
 import Disclaimer from "./components/Disclaimer.jsx";
 
 const TOOLS = [
@@ -29,13 +30,16 @@ const TOOLS = [
   { id: "urlencode",  label: "URL encode", glyph: "%20",   Component: UrlEncoder,        badge: "encoding" },
   { id: "base64",     label: "Base64",     glyph: "b64",   Component: Base64Codec,       badge: "encoding" },
   { id: "regex",      label: "regex",      glyph: ".*",    Component: RegexTester,       badge: "pattern" },
+  { id: "jwt",        label: "JWT",        glyph: "{}",    Component: JwtDecoder,        badge: "auth" },
   { id: "disclaimer", label: "Disclaimer", glyph: "§",     Component: Disclaimer,        badge: "legal" },
 ];
 
 function getToolFromPath() {
   const segments = window.location.pathname.split("/").filter(Boolean);
   const id = segments[segments.length - 1] ?? "";
-  return TOOLS.find((t) => t.id === id)?.id ?? "chmod";
+  const fromPath = TOOLS.find((t) => t.id === id)?.id;
+  if (fromPath) return fromPath;
+  return localStorage.getItem("syskit-last-tool") ?? "chmod";
 }
 
 const THEME_OPTIONS = [
@@ -147,6 +151,7 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
+    localStorage.setItem("syskit-last-tool", activeTool);
     const segments = window.location.pathname.split("/").filter(Boolean);
     const current = segments[segments.length - 1] ?? "";
     if (current !== activeTool) {
