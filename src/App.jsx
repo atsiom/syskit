@@ -11,6 +11,7 @@ import NsLookup from "./components/NsLookup.jsx";
 import EpochConverter from "./components/EpochConverter.jsx";
 import DnsPropagation from "./components/DnsPropagation.jsx";
 import UrlEncoder from "./components/UrlEncoder.jsx";
+import Base64Codec from "./components/Base64Codec.jsx";
 import RegexTester from "./components/RegexTester.jsx";
 import Disclaimer from "./components/Disclaimer.jsx";
 
@@ -26,6 +27,7 @@ const TOOLS = [
   { id: "epoch",      label: "epoch",      glyph: "ts",    Component: EpochConverter,    badge: "time" },
   { id: "dnsprop",    label: "DNS prop",   glyph: "⇢",     Component: DnsPropagation,    badge: "checker" },
   { id: "urlencode",  label: "URL encode", glyph: "%20",   Component: UrlEncoder,        badge: "encoding" },
+  { id: "base64",     label: "Base64",     glyph: "b64",   Component: Base64Codec,       badge: "encoding" },
   { id: "regex",      label: "regex",      glyph: ".*",    Component: RegexTester,       badge: "pattern" },
   { id: "disclaimer", label: "Disclaimer", glyph: "§",     Component: Disclaimer,        badge: "legal" },
 ];
