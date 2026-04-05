@@ -26,8 +26,12 @@ const TOOLS = [
   { id: "disclaimer", label: "Disclaimer", glyph: "§",     Component: Disclaimer,        badge: "legal" },
 ];
 
+const BASE = import.meta.env.BASE_URL; // "/syskit/" in prod, "/" in dev
+
 function getToolFromPath() {
-  const id = window.location.pathname.replace(/^\//, "").split("/")[0];
+  const path = window.location.pathname;
+  const relative = path.startsWith(BASE) ? path.slice(BASE.length) : path.replace(/^\//, "");
+  const id = relative.split("/")[0];
   return TOOLS.find((t) => t.id === id)?.id ?? "chmod";
 }
 
@@ -74,9 +78,11 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    const current = window.location.pathname.replace(/^\//, "").split("/")[0];
+    const path = window.location.pathname;
+    const relative = path.startsWith(BASE) ? path.slice(BASE.length) : path.replace(/^\//, "");
+    const current = relative.split("/")[0];
     if (current !== activeTool) {
-      history.pushState({}, "", "/" + activeTool);
+      history.pushState({}, "", BASE + activeTool);
     }
   }, [activeTool]);
 
