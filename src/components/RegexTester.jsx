@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Card, PageHeader, CopyButton, s } from "./shared/index.jsx";
+import { Card, PageHeader, CopyButton, Checkbox, s } from "./shared/index.jsx";
 
 const FLAG_OPTS = [
   { key: "g", label: "Global",       desc: "find all matches" },
@@ -86,13 +86,7 @@ export default function RegexTester() {
         {/* Flags */}
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: "1rem" }}>
           {FLAG_OPTS.map(({ key, label, desc }) => (
-            <label key={key} onClick={() => toggleFlag(key)}
-              style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", userSelect: "none",
-                       fontSize: "var(--sm)", color: flags[key] ? "var(--green)" : "var(--text-muted)" }}>
-              <div style={{ width: 17, height: 17, border: `1px solid ${flags[key] ? "var(--green)" : "var(--border-2)"}`, borderRadius: 3, background: flags[key] ? "var(--green-bg)" : "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: flags[key] ? "var(--green)" : "transparent", fontFamily: "var(--font-mono)", fontWeight: 700, flexShrink: 0 }}>✓</div>
-              <span style={{ fontFamily: "var(--font-mono)" }}>{key}</span>
-              <span style={{ color: "var(--text-faint)", fontSize: "var(--xs)" }}>— {desc}</span>
-            </label>
+            <Checkbox key={key} checked={flags[key]} onChange={() => toggleFlag(key)} label={key} description={`— ${desc}`} />
           ))}
         </div>
 

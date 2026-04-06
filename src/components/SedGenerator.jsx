@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, PageHeader, CopyButton, s } from "./shared/index.jsx";
+import { Card, PageHeader, CopyButton, Checkbox, s } from "./shared/index.jsx";
 
 export default function SedGenerator() {
   const [mode, setMode] = useState("substitute");
@@ -94,21 +94,13 @@ export default function SedGenerator() {
         {mode === "substitute" && (
           <div style={{ display: "flex", gap: 16, marginTop: "1rem", flexWrap: "wrap" }}>
             {[{ key: "g", label: "Global (-g)" }, { key: "i", label: "Case-insensitive (-I)" }, { key: "p", label: "Print matches (-p)" }, { key: "n", label: "Silent mode (-n)" }].map(({ key, label }) => (
-              <label key={key} style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", fontSize: "var(--sm)", color: flags[key] ? "var(--green)" : "var(--text-muted)", userSelect: "none" }}>
-                <div onClick={() => setFlags((f) => ({ ...f, [key]: !f[key] }))}
-                  style={{ width: 17, height: 17, border: `1px solid ${flags[key] ? "var(--green)" : "var(--border-2)"}`, borderRadius: 3, background: flags[key] ? "var(--green-bg)" : "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: flags[key] ? "var(--green)" : "transparent", fontFamily: "var(--font-mono)", fontWeight: 700, flexShrink: 0 }}>✓</div>
-                {label}
-              </label>
+              <Checkbox key={key} checked={!!flags[key]} onChange={() => setFlags((f) => ({ ...f, [key]: !f[key] }))} label={label} />
             ))}
           </div>
         )}
 
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: "1rem" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", fontSize: "var(--sm)", color: inPlace ? "var(--green)" : "var(--text-muted)", userSelect: "none" }}>
-            <div onClick={() => setInPlace((v) => !v)}
-              style={{ width: 17, height: 17, border: `1px solid ${inPlace ? "var(--green)" : "var(--border-2)"}`, borderRadius: 3, background: inPlace ? "var(--green-bg)" : "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: inPlace ? "var(--green)" : "transparent", fontFamily: "var(--font-mono)", fontWeight: 700, flexShrink: 0 }}>✓</div>
-            In-place edit (-i)
-          </label>
+          <Checkbox checked={inPlace} onChange={() => setInPlace((v) => !v)} label="In-place edit (-i)" />
           {inPlace && (
             <input value={backup} onChange={(e) => setBackup(e.target.value)} placeholder=".bak"
               style={{ ...s.monoInput, width: 100, fontSize: "var(--sm)" }} />

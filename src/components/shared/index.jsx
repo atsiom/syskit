@@ -252,6 +252,19 @@ export function PresetRow({ presets, onSelect }) {
   );
 }
 
+// Checkbox: dot-style toggle, clicking anywhere in the row toggles it
+export function Checkbox({ checked, onChange, label, description, size = 17 }) {
+  return (
+    <div onClick={onChange} style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", userSelect: "none", fontSize: "var(--sm)", color: checked ? "var(--green)" : "var(--text-muted)" }}>
+      <div style={{ width: size, height: size, border: `1px solid ${checked ? "var(--green)" : "var(--border-2)"}`, borderRadius: 3, background: checked ? "var(--green-bg)" : "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.11s" }}>
+        {checked && <div style={{ width: Math.round(size * 0.42), height: Math.round(size * 0.42), borderRadius: "50%", background: "var(--green)" }} />}
+      </div>
+      {label && <span style={{ fontFamily: "var(--font-mono)" }}>{label}</span>}
+      {description && <span style={{ color: "var(--text-faint)", fontSize: "var(--xs)" }}>{description}</span>}
+    </div>
+  );
+}
+
 export function Spinner() {
   return (
     <div style={{ width: 18, height: 18, border: "2px solid var(--border)", borderTopColor: "var(--green)", borderRadius: "50%", animation: "spin 0.7s linear infinite", display: "inline-block", flexShrink: 0 }} />

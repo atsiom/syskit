@@ -112,6 +112,7 @@ body { visibility: var(--visibility, hidden); }
   --teal-bg:     #e6f7f5;
 }
 
+
 html { font-size: 15px; }
 
 html, body, #root {
@@ -147,6 +148,7 @@ input, select, textarea {
 
 button { cursor: pointer; font-family: var(--font-sans); transition: filter 0.13s; will-change: filter; }
 button:not(:disabled):hover { filter: brightness(1.18); }
+[data-theme="light"] button:not(:disabled):hover { filter: brightness(0.90); }
 button:disabled { cursor: not-allowed; }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }

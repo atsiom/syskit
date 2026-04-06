@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, PageHeader, s } from "./shared/index.jsx";
+import { Card, PageHeader, Checkbox, s } from "./shared/index.jsx";
 
 export default function ChmodCalculator() {
   const [bits, setBits] = useState({ ur: 0, uw: 0, ux: 0, gr: 0, gw: 0, gx: 0, or: 0, ow: 0, ox: 0 });
@@ -40,27 +40,11 @@ export default function ChmodCalculator() {
         {heading}
       </div>
       <div style={{ background: "var(--surface-2)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 13px" }}>
-        {keys.map(({ key, label }) => {
-          const isOn = bits[key];
-          return (
-            <div
-              key={key}
-              onClick={() => toggle(key)}
-              style={{ display: "flex", alignItems: "center", gap: 9, padding: "6px 0", cursor: "pointer", userSelect: "none" }}
-            >
-              <div style={{
-                width: 18, height: 18, border: `1px solid ${isOn ? "var(--green)" : "var(--border-2)"}`,
-                borderRadius: 6, background: isOn ? "var(--green-bg)" : "var(--bg)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0, transition: "all 0.11s", fontFamily: "var(--font-mono)",
-                fontSize: 11, fontWeight: 700, color: isOn ? "var(--green)" : "transparent",
-              }}>✓</div>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "var(--sm)", color: isOn ? "var(--green)" : "var(--text-muted)", transition: "color 0.11s" }}>
-                {label}
-              </span>
-            </div>
-          );
-        })}
+        {keys.map(({ key, label }) => (
+          <div key={key} style={{ padding: "6px 0" }}>
+            <Checkbox checked={!!bits[key]} onChange={() => toggle(key)} label={label} size={18} />
+          </div>
+        ))}
       </div>
     </div>
   );

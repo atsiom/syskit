@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, PageHeader, CopyButton, CustomSelect, s } from "./shared/index.jsx";
+import { Card, PageHeader, CopyButton, CustomSelect, Checkbox, s } from "./shared/index.jsx";
 
 export default function AwkGenerator() {
   const [separator, setSeparator] = useState(",");
@@ -82,11 +82,9 @@ export default function AwkGenerator() {
           </div>
         </div>
 
-        <label style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer", fontSize: "var(--sm)", color: useFilter ? "var(--green)" : "var(--text-muted)", userSelect: "none", marginBottom: useFilter ? "0.8rem" : 0 }}>
-          <div onClick={() => setUseFilter((v) => !v)}
-            style={{ width: 17, height: 17, border: `1px solid ${useFilter ? "var(--green)" : "var(--border-2)"}`, borderRadius: 3, background: useFilter ? "var(--green-bg)" : "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: useFilter ? "var(--green)" : "transparent", fontFamily: "var(--font-mono)", fontWeight: 700, flexShrink: 0 }}>✓</div>
-          Enable row filter
-        </label>
+        <div style={{ marginBottom: useFilter ? "0.8rem" : 0 }}>
+          <Checkbox checked={useFilter} onChange={() => setUseFilter((v) => !v)} label="Enable row filter" />
+        </div>
 
         {useFilter && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr", gap: 8, marginBottom: "1rem" }}>
