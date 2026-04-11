@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta -->
+    <title>syskit — developer tools for the browser</title>
+    <meta name="description" content="Free browser-based tools for developers and sysadmins. chmod calculator, cron builder, CIDR subnet calculator, RAID planner, regex tester, JWT decoder, Base64, URL encode, DNS lookup, and more. No sign-up, no tracking." />
+    <meta name="keywords" content="chmod calculator, cron expression builder, CIDR calculator, RAID calculator, regex tester, JWT decoder, base64 encoder, URL encoder, DNS lookup, nslookup, epoch converter, developer tools" />
+    <link rel="canonical" href="https://syskit.atsiom.com/" id="canonical" />
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:site_name"   content="syskit" />
+    <meta property="og:url"         content="https://syskit.atsiom.com/" id="og-url" />
+    <meta property="og:title"       content="syskit — developer tools for the browser" id="og-title" />
+    <meta property="og:description" content="Free browser-based tools for developers and sysadmins. chmod, cron, CIDR, RAID, regex, JWT, Base64, DNS lookup, and more." id="og-desc" />
+    <meta property="og:image"       content="https://syskit.atsiom.com/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="syskit — developer tools for the browser" id="tw-title" />
+    <meta name="twitter:description" content="Free browser-based tools for developers and sysadmins. chmod, cron, CIDR, RAID, regex, JWT, Base64, DNS lookup, and more." id="tw-desc" />
+    <meta name="twitter:image"       content="https://syskit.atsiom.com/og-image.png" />
+
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "syskit",
+      "url": "https://syskit.atsiom.com/",
+      "description": "Free browser-based tools for developers and sysadmins. No sign-up, no tracking, works offline.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Organization", "name": "Atsiom LLC", "url": "https://www.atsiom.com" },
+      "featureList": [
+        "chmod calculator",
+        "crontab expression builder",
+        "CIDR subnet calculator",
+        "RAID capacity planner",
+        "sed command generator",
+        "awk one-liner builder",
+        "IP geolocation lookup",
+        "DNS record lookup",
+        "Unix epoch converter",
+        "DNS propagation checker",
+        "URL encoder and decoder",
+        "Base64 encoder and decoder",
+        "Regular expression tester",
+        "JWT token decoder"
+      ]
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" />
+
+    <style>body { visibility: hidden; }</style>
+    <script>
+      (function () {
+        // Restore path after GitHub Pages 404 redirect
+        var redirect = sessionStorage.getItem('syskit-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('syskit-redirect');
+          history.replaceState(null, null, redirect);
+        }
+
+        // Apply theme before paint to avoid flash
+        var saved = localStorage.getItem('syskit-theme') || 'system';
+        var t = saved === 'system'
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : saved;
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.setProperty('--visibility', 'visible');
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-EjbqNMDm.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-cByOJevc.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
